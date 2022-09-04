@@ -1,3 +1,7 @@
+# 0.1
+v10 compatibility.
+Removed libRuler dependency. Added setting to display/not display a control toggle to enable/disable manhattan ruler distance measurement.
+
 # 0.1.0-alpha
 Testing v10 updates
 

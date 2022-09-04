@@ -19,3 +19,6 @@ Add this [Manifest URL](https://github.com/caewok/fvtt-manhattan-ruler/releases/
 ## Known conflicts
 
 None at the moment...
+
+# Setting and control toggle (from v0.1)
+A setting is provided that allows the user to display or not display a control toggle, under the ruler control button. If the setting is not enabled, Manhattan distance will always be used as the ruler measurement. If it is enabled, then the control toggle determines whether or not Manhattan distance is used.
