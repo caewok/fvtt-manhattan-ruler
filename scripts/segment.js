@@ -5,32 +5,44 @@ ui
 "use strict";
 
 import { getSetting, SETTINGS } from "./settings.js";
+import { log } from "./module.js";
 
- /*
-  * Override Ruler.prototype._computeDistance.
-  * Function to measure the Manhattan distance between two points on the 2D canvas.
-  * @param {boolean} gridSpaces    Base distance on the number of grid spaces moved?
-  * @return {Number} The distance of the segment.
-  */
-export function _computeDistanceRuler(wrapper, gridSpaces) { // eslint-disable-line no-unused-vars
+/**
+ * Wrap GridLayer.prototype.measureDistances
+ * Called by Ruler.prototype._computeDistance
+ * For better compatibility with other modules, get the segment distances for the
+ * x and y directions separately, using the underlying measure.
+ */
+export function measureDistancesGridLayer(wrapped, segments, options = {}) {
   if ( getSetting(SETTINGS.ADD_CONTROL) ) {
     const token_controls = ui.controls.controls.find(elem => elem.name === "token");
     const manhattan_control = token_controls.tools.find(elem => elem.name === "manhattan-distance");
-    if ( !manhattan_control.active ) return wrapper(gridSpaces);
+    if ( !manhattan_control.active ) return wrapped(segments, options);
   }
 
-  const { size, distance } = canvas.scene.dimensions;
-  const gridConversion = distance / size;
-  let totalDistance = 0;
-  const ln = this.segments.length;
-  for ( let i = 0; i < ln; i += 1 ) {
-    const s = this.segments[i];
-    const pixel_distance = Math.abs(s.ray.A.x - s.ray.B.x) + Math.abs(s.ray.A.y - s.ray.B.y);
-    const d = pixel_distance * gridConversion;
+  if ( !segments.length ) return wrapped(segments, options);
 
-    s.last = i === (ln - 1);
-    s.distance = d;
-    totalDistance += d;
-    s.text = this._getSegmentLabel(s, totalDistance);
+  // Construct new segments, creating zig-zag moving in x and then y directions
+  const newSegments = [];
+  for ( const s of segments ) {
+    // Shallow-copy the segment properties so they are available to the wrapped method.
+    const xSegment = {...s};
+    const ySegment = {...s};
+
+    // Don't copy the ray segment references.
+    const { A, B } = s.ray;
+    xSegment.ray = new Ray({ x: A.x, y: A.y }, { x: B.x, y: A.y });
+    ySegment.ray = new Ray({ x: B.x, y: A.y }, { x: B.x, y: B.y });
+
+    newSegments.push(xSegment, ySegment);
   }
+
+  const distances = wrapped(newSegments, options);
+
+  // Re-combine so the distance lengths match the segment lengths.
+  const combinedDistances = [];
+  const ln = distances.length;
+  for ( let i = 0; i < ln; i += 2 ) combinedDistances.push(distances[i] + distances[i + 1]);
+  return combinedDistances;
 }
+
