@@ -1,6 +1,6 @@
 {
   "manhattanruler.settings.add-control-toggle.name": "Add control toggle",
-  "manhattanruler.settings.add-control-toggle.hint": "Add a toggle to token controls to enable/disable manhattan distance ruler measurement.",
+  "manhattanruler.settings.add-control-toggle.hint": "Add a toggle to token controls to enable/disable alternating diagonal ruler measurement.",
 
-  "manhattanruler.controls.add-control-toggle.name": "Measure using Manhattan distance"
+  "manhattanruler.controls.add-control-toggle.name": "Measure distance using alternating diagonals"
 }
