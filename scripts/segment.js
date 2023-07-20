@@ -29,7 +29,7 @@ export function _computeDistanceRuler(wrapper, gridSpaces) { // eslint-disable-l
     const pixel_distanceY = Math.abs(s.ray.A.y - s.ray.B.y);
     const gridDistanceX = pixel_distanceX / size; 
     const gridDistanceY = pixel_distanceY / size;
-    const gridDistance = Math.floor(1.5*Math.min(gridDistanceX, gridDistanceY)) + Math.abs(gridDistanceX - gridDistanceY)
+    const gridDistance = Math.floor(1.5*Math.min(gridDistanceX, gridDistanceY)) + Math.abs(gridDistanceX - gridDistanceY);
     const d = gridDistance * distance;
 
     s.last = i === (ln - 1);
