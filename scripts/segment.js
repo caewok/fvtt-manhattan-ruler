@@ -24,17 +24,17 @@ export function _computeDistanceRuler(wrapper, gridSpaces) { // eslint-disable-l
   let totalDistance = 0;
   const ln = this.segments.length;
   for ( let i = 0; i < ln; i += 1 ) {
-    const currentSegment = this.segments[i];
-    const pixel_distanceX = Math.abs(currentSegment.ray.A.x - currentSegment.ray.B.x);
-    const pixel_distanceY = Math.abs(currentSegment.ray.A.y - currentSegment.ray.B.y);
+    const s = this.segments[i];
+    const pixel_distanceX = Math.abs(s.ray.A.x - s.ray.B.x);
+    const pixel_distanceY = Math.abs(s.ray.A.y - s.ray.B.y);
     const gridDistanceX = pixel_distanceX / size; 
     const gridDistanceY = pixel_distanceY / size;
     const gridDistance = Math.floor(1.5*Math.min(gridDistanceX, gridDistanceY)) + Math.abs(gridDistanceX - gridDistanceY)
     const d = gridDistance * distance;
 
-    currentSegment.last = i === (ln - 1);
-    currentSegment.distance = d;
+    s.last = i === (ln - 1);
+    s.distance = d;
     totalDistance += d;
-    currentSegment.text = this._getSegmentLabel(s, totalDistance);
+    s.text = this._getSegmentLabel(s, totalDistance);
   }
 }
